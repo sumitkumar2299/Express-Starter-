@@ -18,6 +18,22 @@ class userService {
             // we found a user
             throw{reason: "user with the given email and mobile number already exist", statusCode: 400}
         }
+
+        // if user not found then create user in the database 
+
+        const newUser = await this.userRepository.createUser({
+            email:userDetails.email,
+            password:userDetails.password,
+            FirstName:userDetails.FirstName,
+            lastName: userDetails.lastName,
+            mobileNumber: userDetails.mobileNumber
+        });
+        if(!newUser){
+            throw{reason:"Something went wrong, cannot create user",statusCode:500}
+        }
+
         // 3. return the details of the created user 
+        return newUser;
     }
 }
+module.exports = userService;

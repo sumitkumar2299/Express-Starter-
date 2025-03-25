@@ -6,6 +6,11 @@ class UserRepositories{
         return response;
 
     }
+
+    async createUser(userDetails) {
+        const response = await user.create(userDetails);
+        return response;
+    }
 }
 
 module.exports = UserRepositories;
