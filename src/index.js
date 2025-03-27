@@ -1,15 +1,16 @@
 const express = require('express');
 const cookieParser = require('cookie-parser')
 
-
-
 const serverConfig = require('./config/serverConfig');
 const connectDB = require('./config/dbConfig');
 // const user = require('./Schema/userSchema');
 const userRouter = require('./Routes/userRoutes');
 const CartRouter = require('./Routes/CartRoute');
 const authRouter = require('./Routes/authRoute');
+const uploader = require('./middlewares/multerMiddleware');
 // const { isLoggedIn } = require('./Validation/authValidator');
+const cloudinary = require('./config/cloudinaryConfig');
+const fs = require('fs/promises');
 
 
 const app = express();
@@ -38,6 +39,20 @@ app.use('/auth',authRouter)
 //     console.log(req.cookies);
 //     return res.json({message:"pong"});
 // })
+
+app.post('/photo',uploader.single("incomingFile"), async(req,res) =>{
+    console.log(req.file);
+    const result = await cloudinary.uploader.upload(req.file.path)
+    console.log("result from cloudinary",result);
+    await fs.unlink(req.file.path);
+    return res.json({message:"ok"})
+} )
+
+
+// app.post('/photo', uploader.single('incomingFile'), (req, res) => {
+//     return res.json({ message: "File uploaded successfully", file: req.file });
+// });
+
 
 app.get('/test', (req, res) => {
     console.log("received ping request")
