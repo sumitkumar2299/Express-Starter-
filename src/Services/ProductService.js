@@ -61,7 +61,8 @@ const NotFoundError = require('../utils/notFoundError');
          try {
              const cloudinaryResponse = await cloudinary.uploader.upload(imagePath);
              var productImage = cloudinaryResponse.secure_url;
-             await fs.unlink(imagePath);
+            //  await fs.unlink(imagePath);
+            await fs.unlink(process.cwd() + "/" + imagePath);
          } catch(error) {
              console.log(error);
              throw new internalServerError();
