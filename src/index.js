@@ -11,6 +11,7 @@ const uploader = require('./middlewares/multerMiddleware');
 // const { isLoggedIn } = require('./Validation/authValidator');
 const cloudinary = require('./config/cloudinaryConfig');
 const fs = require('fs/promises');
+const productRouter = require('./Routes/productRoute');
 
 
 const app = express();
@@ -30,7 +31,8 @@ app.use(express.urlencoded({extended: true}))
 
 app.use('/users',userRouter); // connects the router to the server 
 app.use('/carts',CartRouter);
-app.use('/auth',authRouter)
+app.use('/auth',authRouter);
+app.use('/products',productRouter);
 
 
 
@@ -40,13 +42,13 @@ app.use('/auth',authRouter)
 //     return res.json({message:"pong"});
 // })
 
-app.post('/photo',uploader.single("incomingFile"), async(req,res) =>{
-    console.log(req.file);
-    const result = await cloudinary.uploader.upload(req.file.path)
-    console.log("result from cloudinary",result);
-    await fs.unlink(req.file.path);
-    return res.json({message:"ok"})
-} )
+// app.post('/photo',uploader.single("incomingFile"), async(req,res) =>{
+//     console.log(req.file);
+//     const result = await cloudinary.uploader.upload(req.file.path)
+//     console.log("result from cloudinary",result);
+//     await fs.unlink(req.file.path);
+//     return res.json({message:"ok"})
+// } )
 
 
 // app.post('/photo', uploader.single('incomingFile'), (req, res) => {
